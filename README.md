@@ -194,7 +194,11 @@ $ ngc registry image info nvcr.io/hpc/gromacs:2020.2
 
 #### Pulling Docker containers and building Singularity containers:
 
-Once you select a Docker container to use, you can pull it down and convert it to Singularity image format with the following command.
+Once you select a Docker container to use, you need to pull it down and convert it to Singularity image format with the following command. If you are on Hopper, load the `singularity/3.4.2` first.
+
+```bash
+$ module load singularity/3.4.2
+```
 
 ```bash
 $ singularity build <container_name>_<container_version/tag>.sif docker://nvcr.io/<hpc>/<container_name><container_version/tag>
@@ -203,6 +207,7 @@ $ singularity build <container_name>_<container_version/tag>.sif docker://nvcr.i
 Here is an example for preparing a GROMACS Singularity container:
 
 ```bash
+$ module load singularity/3.4.2
 $ singularity build gromacs-2020_2.sif docker://nvcr.io/hpc/gromacs:2020.2
 ```
 
@@ -254,7 +259,7 @@ salloc: Waiting for resource configuration
 salloc: Nodes dgx-a100-01 are ready for job
 ```
 
-Then access the server directly using:
+Then log into the server directly using:
 
 ```bash
 $ ssh dgx-a100-01
@@ -401,12 +406,23 @@ We encourage the use of environmental variables to make the job submission file 
 
 The syntax for running different containers varies depending on the application. Please check the [NGC page](https://ngc.nvidia.com/catalog/containers) for more instructions on running these containers using Singularity.
 
+## Storage Locations
+
+Currently, these locations have been designated for storing shared and user-specific containers.
+
+* Containers
+  * Shared:`/containers/dgx/Containers`
+  * User-specific:`/containers/dgx/UserContainers/$USER`
+* Examples
+  * Containerized applications:`/containers/dgx/Examples`
+  * Native applications: `/groups/ORC-VAST/app-tests`
+
 ## Sample Runs
 
 We provide some sample calculations to facilitate setting up and running calculations:
 
 * examples demonstrating how you run different applications to`/containers/dgx/Examples`
-* examples on running native and containerized applications is available here:`/groups/ORC-VAST/app-tests/NAMD/native/2.14-CUDA-enabled`
+* examples on running native and containerized applications is available here:`/groups/ORC-VAST/app-tests`
 * The examples at [https://gitlab.com/NVHPC/ngc-examples](https://gitlab.com/NVHPC/ngc-examples) are helpful. For many applications, there are no instructions on running the containers using Singularity, but you should be able to build one from the Docker image and run it. 
 
 
