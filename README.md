@@ -40,8 +40,8 @@ $ ssh <username>@hopper.orc.gmu.edu.
 
 You can log into the DGX only if
 
-* you have submitted a batch job and it is actively running on the DGX, or 
-* you have an active reservation for resources on the DGX
+* you have submitted a SLURM batch job \(using `sbatch`\) and it is actively running on the DGX, or 
+* you have an active SLURM interactive session \(using `salloc`\) on the DGX
 
 In those cases, you can log into the DGX with:
 
