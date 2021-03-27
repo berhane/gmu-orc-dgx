@@ -12,21 +12,21 @@ You can learn more about NVIDIA DGX A100 systems here:
 
 |  |  |
 | :--- | :--- |
-| GPUs | 8x NVIDIA A100 Tensor Core GPUs |
-| GPU Memory | 320 GB total |
-| Performance | 5 petaFLOPS AI |
-|  | 10 petaFLOPS INT8 |
-| NVIDIA NVSwitches | 6 |
-| CPU | Dual AMD Rome 7742, |
-|  | 128/256 cores/threads total, 2.25 GHz \(base\), 3.4 GHz \(max boost\) |
-| System Memory | 1TB |
-| Networking | 8x Single-Port Mellanox ConnectX-6 VPI 200Gb/s HDR InfiniBand |
-|  | 1x Dual-Port Mellanox ConnectX-6 VPI |
-|  | 10/25/50/100/200Gb/s Ethernet |
-| Storage | OS: 2x 1.92TB M.2 NVME drives |
-|  | Internal Storage: 15TB |
-|  | \(4x 3.84TB\) U.2 NVME drives |
-| Software | Ubuntu 20.04 LTS |
+| **GPUs** | 8x NVIDIA A100 Tensor Core GPUs |
+|        | 320 GB total memory|
+| **Performance** | 5 petaFLOPS AI |
+|               | 10 petaFLOPS INT8 |
+| **CPU** | Dual AMD Rome 7742, |
+|       | 128/256 cores/threads total, 2.25 GHz \(base\), 3.4 GHz \(max boost\) |
+| **System Memory** | 1TB |
+| **NVIDIA NVSwitches** | 6 |
+| **Networking** | 8x Single-Port Mellanox ConnectX-6 VPI 200Gb/s HDR InfiniBand |
+|              | 1x Dual-Port Mellanox ConnectX-6 VPI |
+|              | 10/25/50/100/200Gb/s Ethernet |
+| **Storage** | OS: 2x 1.92TB M.2 NVME drives |
+|         | Internal Storage: 15TB |
+|         | \(4x 3.84TB\) U.2 NVME drives |
+| **Base OS** | Ubuntu 20.04 LTS |
 
 ## Getting Access
 
