@@ -4,7 +4,7 @@ description: A list of issues that need to be addressed
 
 # Outstanding Issues
 
-## 03-21-2021 -  Modules
+## 03-24-2021 -  Modules
 
 * Need Lmod modules to operate seamlessly between Hopper and the DGX
 * Need to break modules into
@@ -21,7 +21,7 @@ description: A list of issues that need to be addressed
 
 * \_
 
-## 03-21-2021 -  Singularity on Hopper
+## 03-24-2021 -  Singularity on Hopper
 
 * Singularity 3.7.0 on Hopper won't run on AMD machines because Spack has optimized it for Intel 
 * use Singularity 3.4.2 until we build Singularity 3.7.0 for AMD  
@@ -34,9 +34,10 @@ description: A list of issues that need to be addressed
 
 * \_
 
-## 03-21-2021 -  server to compile CUDA-enabled code
+## 03-29-2021 -  server to compile CUDA-enabled code
 
-* currently need to compile CUDA-enabled code on the DGX, or potentially on Argo, after installing CUDA 11/12
+* currently need to compile CUDA-enabled code on the DGX itself, or potentially on Argo, after installing CUDA 11/12 because Hopper's login and compute don't have GPUs or NVIDIA drivers.
+* May need to install GPUs on the Hopper's login nodes
 * Need to streamline and document that workflow
 
 **Fixed**
