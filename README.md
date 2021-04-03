@@ -13,19 +13,19 @@ You can learn more about NVIDIA DGX A100 systems here:
 |  |  |
 | :--- | :--- |
 | **GPUs** | 8x NVIDIA A100 Tensor Core GPUs |
-|        | 320 GB total memory|
+|  | 320 GB total memory |
 | **Performance** | 5 petaFLOPS AI |
-|               | 10 petaFLOPS INT8 |
+|  | 10 petaFLOPS INT8 |
 | **CPU** | Dual AMD Rome 7742, |
-|       | 128/256 cores/threads total, 2.25 GHz \(base\), 3.4 GHz \(max boost\) |
+|  | 128/256 cores/threads total, 2.25 GHz \(base\), 3.4 GHz \(max boost\) |
 | **System Memory** | 1TB |
 | **NVIDIA NVSwitches** | 6 |
 | **Networking** | 8x Single-Port Mellanox ConnectX-6 VPI 200Gb/s HDR InfiniBand |
-|              | 1x Dual-Port Mellanox ConnectX-6 VPI |
-|              | 10/25/50/100/200Gb/s Ethernet |
+|  | 1x Dual-Port Mellanox ConnectX-6 VPI |
+|  | 10/25/50/100/200Gb/s Ethernet |
 | **Storage** | OS: 2x 1.92TB M.2 NVME drives |
-|         | Internal Storage: 15TB |
-|         | \(4x 3.84TB\) U.2 NVME drives |
+|  | Internal Storage: 15TB |
+|  | \(4x 3.84TB\) U.2 NVME drives |
 | **Base OS** | Ubuntu 20.04 LTS |
 
 ## Getting Access
@@ -49,8 +49,8 @@ In those cases, you can log into the DGX with:
 $ ssh dgx-a100-01
 ```
 
-Otherwise, your connection attempt will be declined with a message like this:  
-  
+Otherwise, your connection attempt will be declined with a message like this:
+
 _Access denied by pam\_slurm\_adopt: you have no active jobs on this node  
 Connection closed by server on port \#\#_
 
@@ -67,7 +67,7 @@ These two approaches are described below.
 
 ## Running Containerized Applications
 
-We provide a growing list of Singularity containers in a shared location. You are also welcome to pull and run your own Singularity containers. 
+We provide a growing list of Singularity containers in a shared location. You are also welcome to pull and run your own Singularity containers.
 
 ### Using Shared Containers
 
@@ -80,28 +80,28 @@ $ tree /containers/dgx/Containers
 
 /containers/dgx/Containers
 ├── autodock
-│   └── autodock_2020.06.sif
+│   └── autodock_2020.06.sif
 ├── caffe
-│   └── caffe_20.03-py3.sif
+│   └── caffe_20.03-py3.sif
 ├── digits
-│   └── digits_21.02-tensorflow-py3.sif
+│   └── digits_21.02-tensorflow-py3.sif
 ├── gamess
-│   └── gamess_17.09-r2-libcchem.sif
+│   └── gamess_17.09-r2-libcchem.sif
 ├── gromacs
-│   └── gromacs-2020_2.sif
+│   └── gromacs-2020_2.sif
 ├── lammps
-│   └── lammps_29Oct2020.sif
+│   └── lammps_29Oct2020.sif
 ├── namd
-│   ├── namd_2.13-singlenode.sif
-│   └── namd_3.0-alpha3-singlenode.sif
+│   ├── namd_2.13-singlenode.sif
+│   └── namd_3.0-alpha3-singlenode.sif
 ├── ngc-preflightcheck
-│   └── ngc-preflightcheck_20.11.sif
+│   └── ngc-preflightcheck_20.11.sif
 ├── nvidia-hpc-benchmarks
-│   └── hpc-benchmarks_20.10-hpl.sif
+│   └── hpc-benchmarks_20.10-hpl.sif
 ├── pytorch
-│   └── pytorch_21.02-py3.sif
+│   └── pytorch_21.02-py3.sif
 ├── quantum_espresso
-│   └── quantum_espresso_v6.7.sif
+│   └── quantum_espresso_v6.7.sif
 └── tensorflow
     └── tensorflow_21.02-tf1-py3.sif
 ```
@@ -110,7 +110,7 @@ We encourage using these shared containers because they are optimized by NVIDIA 
 
 ### Building your Own Containers
 
-Modern containers come from many registries \(Dockerhub, NGC, SingularityHub, Biocontainers, ... etc \) and in different formats \(Docker, Singularity, OCI\) and runtimes \(Docker, Singularity, CharlieCloud, ...\). 
+Modern containers come from many registries \(Dockerhub, NGC, SingularityHub, Biocontainers, ... etc \) and in different formats \(Docker, Singularity, OCI\) and runtimes \(Docker, Singularity, CharlieCloud, ...\).
 
 {% hint style="warning" %}
 Please keep in mind that you can not build or run Docker containers directly on Hopper or the DGX. You would need to pull and convert Docker containers to Singularity format and run the Singularity containers.
@@ -220,12 +220,23 @@ Also note that you can pull the containers from NGC, DockerHub or any other sour
 
 ## Running Native Applications
 
-If you want to run native GPU-capable applications, you can run them much like you have on Argo. 
+If you want to run native GPU-capable applications, you can run them much like you have on Argo.
 
 * load up the module for the GPU-capable application/version
 * run the application
 
 We currently have a limited set of native applications that have been tested on the DGX. That will change over time.
+
+{% hint style="warning" %}
+The DGX is very different from Argo and Hopper in terms of OS, CPU and GPU architecture as well as the software stack running on it. Therefore, you would generally need to recompile your code on the DGX itself using the software stack built for the DGX. Please email orchelp@gmu.edu if you need help.
+{% endhint %}
+
+| **System** | **Argo** | **Hopper** | **DGX** |
+| :--- | :--- | :--- | :--- |
+| **OS** | CentOS 7.8 | CentOS 8.3 | Ubuntu 20.04 |
+| **CPU** | Intel  | Intel | AMD |
+| **GPUs** | K80, V100 | - | A100 |
+| **NVIDIA  driver version** | 440.x-455.y | - | 450.x |
 
 ## Scheduling SLURM Jobs
 
@@ -244,7 +255,7 @@ debug          up    1:00:00      2   hop[043-045]
 interactive    up   12:00:00      2   hop[043-045] 
 contrib        up 6-00:00:00      42  hop[001-042]
 normal         up 3-00:00:00      25  hop[046-070] 
-gpuq           up 1-00:00:00      1   dgx-a100-01 
+gpuq           up 1-00:00:00      1   dgx-a100-01
 ```
 
 ### Interactive Mode
@@ -424,8 +435,4 @@ We provide some sample calculations to facilitate setting up and running calcula
 * examples demonstrating how you run different applications to`/containers/dgx/Examples`
 * examples on running native and containerized applications is available here:`/groups/ORC-VAST/app-tests`
 * The examples at [https://gitlab.com/NVHPC/ngc-examples](https://gitlab.com/NVHPC/ngc-examples) are helpful. For many applications, there are no instructions on running the containers using Singularity, but you should be able to build one from the Docker image and run it. 
-
-
-
-## 
 
