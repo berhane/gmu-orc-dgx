@@ -225,7 +225,7 @@ If you want to run native GPU-capable applications, you can run them much like y
 * load up the module for the GPU-capable application/version
 * run the application
 
-We currently have a limited set of native applications that have been tested on the DGX. That will change over time.
+We currently have a limited set of native applications that have been tested on the DGX. That will increase over time.
 
 {% hint style="warning" %}
 The DGX is very different from Argo and Hopper in terms of OS, CPU and GPU architecture as well as the software stack running on it. Therefore, you would generally need to recompile your code on the DGX itself using the software stack built for the DGX. Please email orchelp@gmu.edu if you need help.
@@ -237,6 +237,20 @@ The DGX is very different from Argo and Hopper in terms of OS, CPU and GPU archi
 | **CPU** | Intel  | Intel | AMD |
 | **GPUs** | K80, V100 | - | A100 |
 | **NVIDIA  driver version** | 440.x-455.y | - | 450.x |
+
+To access modules built for the DGX, you can load the `dgx` module and see what modules are available.
+
+```text
+$ module load dgx
+$ module avail
+...
+------------------------------------ /opt/sw/spack/modules/lmod/linux-ubuntu20.04-x86_64/gcc/9.3.0 -------------------------------------
+   cmake/3.18.2-df (D)    cuda/11.0.2-zg        lmod/8.2.10-pk      python/3.7.6-2u        singularity/3.7.0-gs (D)
+   cuda/10.2.89-so        cuda/11.2.1-nu (D)    python/2.7.18-ew    python/3.8.6-3v (D)
+...
+```
+
+
 
 ## Scheduling SLURM Jobs
 
