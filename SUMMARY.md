@@ -1,10 +1,17 @@
 # Table of contents
 
 * [Getting Started](README.md)
-* [Running TensorFlow](running-tensorflow.md)
-* [Running NAMD](namd.md)
-* [Running GROMACS](gromacs.md)
 * [Using NGC](using-ngc.md)
-* [FAQs](faqs.md)
-* [Outstanding Issues](outstanding-issues.md)
+
+## Running Applications
+
+* [GROMACS](running-applications/gromacs.md)
+* [NAMD](running-applications/namd.md)
+* [TensorFlow](running-applications/running-tensorflow.md)
+* [LAMMPS](running-applications/lammps.md)
+
+## Misc
+
+* [FAQ](misc/faqs.md)
+* [Outstanding Issues](misc/outstanding-issues.md)
 
