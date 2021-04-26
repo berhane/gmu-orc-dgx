@@ -199,7 +199,8 @@ log-10nodes-480cores-1thr_per_core.lammps:Performance: 4622.468 tau/day, 10.700 
 * Native applications built using the GNU9+OpenMPI4 and Intel20+IMPI20 perform equally well. However, the way the jobs are launched is slightly different, so users are encouraged to see the examples at `/groups/ORC-VAST/app-tests/lammps`.
 
 ```bash
- tree -d /groups/ORC-VAST/app-tests/lammps
+$ tree -d /groups/ORC-VAST/app-tests/lammps
+
 /groups/ORC-VAST/app-tests/lammps
 ├── dgx
 │   └── containerized
