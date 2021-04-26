@@ -4,9 +4,13 @@ description: Running LAMMPS using as a container and native application
 
 # LAMMPS
 
-## As a container
+## Running as a container
 
-One can use the highly-optimized LAMMPS containers from NGC \([https://ngc.nvidia.com/catalog/containers/nvidia:lammps](https://ngc.nvidia.com/catalog/containers/nvidia:lammps)\) for single or multiple GPU runs as follows. 
+One can use the highly-optimized LAMMPS containers from NGC \([https://ngc.nvidia.com/catalog/containers/nvidia:lammps](https://ngc.nvidia.com/catalog/containers/nvidia:lammps)\) for single- or multi-GPU runs as follows. 
+
+The containers can currently be found at `$SINGULARITY_BASE/containers/dgx/Containers/lammps`
+
+The sample tests are at all located at `/groups/ORC-VAST/app-tests/lammps`.
 
 ```
 $ tree -rf /groups/ORC-VAST/app-tests/lammps/dgx/containerized
@@ -17,7 +21,7 @@ $ tree -rf /groups/ORC-VAST/app-tests/lammps/dgx/containerized
 
 ### Batch submission file
 
-A typical batch submission file would like this:
+A typical batch submission file \(named `run.slurm` \)  would like this:
 
 {% code title="run.slurm" %}
 ```bash
@@ -164,5 +168,61 @@ log-4gpus-4cores.lammps:Performance: 10636.647 tau/day, 24.622 timesteps/s
 log-8gpus-8cores.lammps:Performance: 12251.451 tau/day, 28.360 timesteps/s
 ```
 
+#### Comparison with CPU-only Runs
 
+It is always informative to see how much GPU acceleration speeds up calculations. For that purpose, we compared the above benchmarks with those run on nodes with CPUs only.
+
+#### Intel20-IMPI20 version
+
+```bash
+log-1nodes-48cores-1thr_per_core.lammps:Performance: 499.450 tau/day, 1.156 timesteps/s
+log-2nodes-192cores-1thr_per_core.lammps:Performance: 1908.361 tau/day, 4.418 timesteps/s 
+log-4nodes-432cores-1thr_per_core.lammps:Performance: 4327.999 tau/day, 10.019 timesteps/s 
+```
+
+#### GNU9-OpenMPI4 
+
+```bash
+$ grep -i performance log-gpus-*
+
+log-1node-1thr_per_core.lammps:Performance: 479.698 tau/day, 1.110 timesteps/s
+log-4nodes-1thr_per_core.lammps:Performance: 1824.944 tau/day, 4.224 timesteps/s
+log-10nodes-480cores-1thr_per_core.lammps:Performance: 4622.468 tau/day, 10.700 timesteps/s
+```
+
+### Conclusions
+
+* GPU-optimized LAMMPS container runs very well on our DGX A100
+* The GPU code scales well with the number of GPUs used, but it will depend heavily on the size of the simulation
+* The two GPU-accelerated containers we tested perform about the same
+* 1 NVIDIA A100 GPU performs as well as 9-10 nodes \(dual Intel Cascade Lake CPUs with 48 cores per server\) combined
+* Native applications built using the GNU9+OpenMPI4 and Intel20+IMPI20 perform equally well. However, the way the jobs are launched is slightly different, so users are encouraged to see the examples at `/groups/ORC-VAST/app-tests/lammps`.
+
+```bash
+ tree -d /groups/ORC-VAST/app-tests/lammps
+/groups/ORC-VAST/app-tests/lammps
+├── dgx
+│   └── containerized
+│       ├── 10Feb2021
+│       └── 29Oct2020
+└── hopper
+    ├── containerized
+    │   └── 29Oct2020
+    │       ├── multinode
+    │       │   └── other
+    │       ├── single-node-hybrid
+    │       ├── single-node-mpi
+    │       └── single-node-omp
+    └── native
+        └── 21Jul2020
+            ├── gnu9-openmpi4
+            │   ├── large-example
+            │   ├── multi-node
+            │   ├── single-node-mpi
+            └── intel20-impi20
+                ├── large-example
+                ├── multi-node
+                └── single-node-mpi
+
+```
 
