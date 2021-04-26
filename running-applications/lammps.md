@@ -15,9 +15,11 @@ $ tree -rf /groups/ORC-VAST/app-tests/lammps/dgx/containerized
 └── /groups/ORC-VAST/app-tests/lammps/dgx/containerized/29Oct2020
 ```
 
+### Batch submission file
+
 A typical batch submission file would like this:
 
-{% code title="$ run.slurm" %}
+{% code title="run.slurm" %}
 ```bash
 #!/bin/bash
 #SBATCH --partition=gpuq                    # the DGX only belongs in the 'gpu'  partition
@@ -97,11 +99,12 @@ ${MPI_LAUNCH} ${SINGULARITY_RUN} ${CONTAINER} lmp \
 ```
 {% endcode %}
 
+### Input files
+
 You would need this input file to run this test. You can copy 
 
+{% code title="in.lj.tzt" %}
 ```bash
-$ cat in.lj.txt
-
 # 3d Lennard-Jones melt
 
 variable        x index 1
@@ -133,4 +136,33 @@ fix             1 all nve
 
 run             100
 ```
+{% endcode %}
+
+### Benchmarks
+
+For this particular example, the benchmarks indicate that the code scales well up 4 GPUs. Also, the performance of the latest container \(20Feb2021\) is marginally better than the previous one \(29Oct2020\).  
+
+#### 29Oct2020 
+
+```bash
+$ grep -i performance *lammps
+
+log-1gpus-1cores.lammps:Performance: 4304.617 tau/day, 9.964 timesteps/s 
+log-2gpus-2cores.lammps:Performance: 6647.065 tau/day, 15.387 timesteps/s 
+log-4gpus-4cores.lammps:Performance: 10345.111 tau/day, 23.947 timesteps/s 
+log-8gpus-8cores.lammps:Performance: 10983.890 tau/day, 25.426 timesteps/s
+```
+
+#### 10Feb2021
+
+```bash
+$ grep -i performance *lammps
+
+log-1gpus-1cores.lammps:Performance: 4484.309 tau/day, 10.380 timesteps/s
+log-2gpus-2cores.lammps:Performance: 6857.607 tau/day, 15.874 timesteps/s
+log-4gpus-4cores.lammps:Performance: 10636.647 tau/day, 24.622 timesteps/s
+log-8gpus-8cores.lammps:Performance: 12251.451 tau/day, 28.360 timesteps/s
+```
+
+
 
