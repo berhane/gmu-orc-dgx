@@ -197,7 +197,7 @@ $ ngc registry image info nvcr.io/hpc/gromacs:2020.2
 Once you select a Docker container to use, you need to pull it down and convert it to Singularity image format with the following command. If you are on Hopper, load the `singularity/3.4.2` first.
 
 ```bash
-$ module load singularity/3.4.2
+$ module load singularity
 ```
 
 ```bash
@@ -207,7 +207,7 @@ $ singularity build <container_name>_<container_version/tag>.sif docker://nvcr.i
 Here is an example for preparing a GROMACS Singularity container:
 
 ```bash
-$ module load singularity/3.4.2
+$ module load singularity
 $ singularity build gromacs-2020_2.sif docker://nvcr.io/hpc/gromacs:2020.2
 ```
 
@@ -238,10 +238,10 @@ The DGX is very different from Argo and Hopper in terms of OS, CPU and GPU archi
 | **GPUs** | K80, V100 | - | A100 |
 | **NVIDIA  driver version** | 440.x-455.y | - | 450.x |
 
-To access modules built for the DGX, you can load the `dgx` module and see what modules are available.
+To access modules built for the DGX, you can load the `hosts/dgx` module and see what modules are available.
 
 ```text
-$ module load dgx
+$ module load hosts/dgx
 $ module avail
 ...
 ------------------------------------ /opt/sw/spack/modules/lmod/linux-ubuntu20.04-x86_64/gcc/9.3.0 -------------------------------------
