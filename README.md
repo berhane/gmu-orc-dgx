@@ -246,19 +246,34 @@ The DGX is very different from Argo and Hopper in terms of OS, CPU and GPU archi
 | **GPUs** | K80, V100 | - | A100 |
 | **NVIDIA  driver version** | 440.x-455.y | - | 450.x |
 
-To access modules built for the DGX, you can load the `hosts/dgx` module and see what modules are available.
+To access modules built for the DGX, first load into the DGX by creating a short interactive session:
 
-```text
-$ module load hosts/dgx
-$ module avail
-...
------------------------------------- /opt/sw/spack/modules/lmod/linux-ubuntu20.04-x86_64/gcc/9.3.0 -------------------------------------
-   cmake/3.18.2-df (D)    cuda/11.0.2-zg        lmod/8.2.10-pk      python/3.7.6-2u        singularity/3.7.0-gs (D)
-   cuda/10.2.89-so        cuda/11.2.1-nu (D)    python/2.7.18-ew    python/3.8.6-3v (D)
-...
+```bash
+$ salloc -p gpuq -q gpu -n 1 -t 0-01:00:00
+
+salloc: Granted job allocation 5562
+salloc: Waiting for resource configuration
+salloc: Nodes dgx-a100-01 are ready for job
+
+$
 ```
 
+You should see a `hosts/dgx` module loaded and other  modules that are available to you:
 
+```text
+
+$ module avail
+...
+----- GNU-9.3.0 ---------
+   openmpi/4.0.4-ev    python/3.7.6-tf    python/3.8.6-mf (L,D)
+
+----- Independent ---------
+   cuda/10.2.89    cuda/11.0.2    cuda/11.2.1 (D)    gnu9/9.3.0    intel/2020.2    orca/4.2.1    singularity/3.7.1
+
+----- Core ---------
+   hosts/dgx (L)    lmod    settarg    use.own
+...
+```
 
 ## Scheduling SLURM Jobs
 
@@ -416,7 +431,7 @@ Below is a sample SLURM batch submission file you can use as an example to submi
 #SBATCH --job-name=jmultigpu_basics 
 #SBATCH --output=jmultigpu_basics.%j 
 #SBATCH --nodes=1 
-#SBATCH --ntasks=<N_CPU_CORES> 
+#SBATCH --ntasks-per-node=<N_CPU_CORES> 
 #SBATCH --gres=gpu:a100:<N_GPUs> 
 #SBATCH --mem-per-cpu=<MEM_PER_CORE>  
 #SBATCH --export=ALL 
