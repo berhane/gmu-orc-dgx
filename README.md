@@ -154,38 +154,16 @@ We use Docker containers pulled from [NVIDIA GPU Cloud \(NGC\)](https://ngc.nvid
 
 #### NGC commands:
 
-To interact with NGC using the CLI, you can run the following command to see the possible options:
-
-```bash
-$ ngc registry image –help
-
-image: 
-       {info,list,pull,push,remove,update} 
-
-info    Display information about an image
-           repository or tagged image. 
-list    List container images accessible by the user. 
-pull    Pull a container image from the NGC image registry. If no tag is provided, 'latest' is assumed. 
-push     Push a container image to the NGC image registry. If no tag is provided, 'latest' is assumed. 
-remove    Remove an image repository or specific image with an image tag. 
-update     Update image repository metadata
-```
+This example below demonstrates how to search and pull down a GROMACS image using the NGC CLI:
 
 ```bash
 $ ngc registry image list 
 $ ngc registry image list | grep -i <container_name> 
 $ ngc registry image info nvcr.io/<container_name>:<containter_tag>
-```
-
-This example demonstrates how to search and pull down a GROMACS image:
-
-```bash
 $ ngc registry image list|grep -i gromacs 
 
 | GROMACS | hpc/gromac | 2020.2 | 275.47 MB | Sep 24, | unlocked|
-```
 
-```bash
 $ ngc registry image info nvcr.io:hpc/gromacs 
 
 -------------------------------------------------- 
@@ -209,9 +187,7 @@ $ ngc registry image info nvcr.io:hpc/gromacs
   2020.2-x86_64 
   2018.2 
   2016.4
-```
-
-```bash
+  
 $ ngc registry image info nvcr.io/hpc/gromacs:2020.2 
 
 -------------------------------------------------- 
@@ -226,7 +202,7 @@ $ ngc registry image info nvcr.io/hpc/gromacs:2020.2
 
 #### Pulling Docker containers and building Singularity containers:
 
-Once you select a Docker container to use, you need to pull it down and convert it to Singularity image format with the following command. If you are on Hopper, load the `singularity/3.4.2` first.
+Once you select a Docker container to use, you need to pull it down and convert it to a Singularity image format with the following command. You would need to load `singularity` module first.
 
 ```bash
 $ module load singularity
