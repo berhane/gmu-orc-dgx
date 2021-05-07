@@ -38,12 +38,44 @@ Log into the Hopper cluster with:
 $ ssh <username>@hopper.orc.gmu.edu.
 ```
 
-You can log into the DGX only if
+You can log into the DGX only if you only have an active job on the DGX: 
 
 * you have submitted a SLURM batch job \(using `sbatch`\) and it is actively running on the DGX, or 
 * you have an active SLURM interactive session \(using `salloc`\) on the DGX
 
-In those cases, you can log into the DGX with:
+Depending on why you want access to the DGX, you can take these two approaches.
+
+### For Quick Compiling and Testing
+
+Because the DGX has a different OS \(Ubuntu 20.04 LTS\) and CPU architecture \(AMD EPYC Zen2\), you would likely need to recompile your code on the DGX itself and run quick tests before submitting any production runs. For that purpose, you can request a small interactive session via SLURM:
+
+* If you don't need a GPU, you can request 1 core :
+
+```bash
+$  salloc -p gpuq -q gpu -n 1 -t 0-01:00:00 
+```
+
+* If you need a GPU, you can request a GPU along with CPU cores
+
+```bash
+$ salloc -p gpuq -q gpu -n 1 --gres=gpu:a100:1 -t 0-01:00:00   
+```
+
+This will log you into the DGX as soon as the requested resource is available:
+
+```bash
+$ salloc -p gpuq -q gpu -n 1 -t 0-01:00:00
+
+salloc: Granted job allocation 5562
+salloc: Waiting for resource configuration
+salloc: Nodes dgx-a100-01 are ready for job
+
+$user@dgx-a100-01:~$
+```
+
+### For Production Calculations
+
+For production runs, you can submit your job batch or interactive job through SLURM and `ssh` into the DGX if necessary.
 
 ```bash
 $ ssh dgx-a100-01
