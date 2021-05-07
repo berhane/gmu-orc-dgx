@@ -297,7 +297,7 @@ gpuq           up 1-00:00:00      1   dgx-a100-01
 
 ### Interactive Mode
 
-You access the DGX A100 server for an interactive session. Start the session with:
+You can request an interactive access the DGX A100 server through SLLURM as follows:
 
 ```bash
 $ salloc -p gpuq -q gpu --gres=gpu:a100:1 -t 0-01:00:00 
@@ -305,12 +305,15 @@ $ salloc -p gpuq -q gpu --gres=gpu:a100:1 -t 0-01:00:00
 salloc: Granted job allocation 2185 
 salloc: Waiting for resource configuration 
 salloc: Nodes dgx-a100-01 are ready for job
+
+$ 
 ```
 
-Then log into the server directly using:
+Once your reservation is available, you will be logged into the DGX automatically:
 
 ```bash
-$ ssh dgx-a100-01
+$ hostname -s
+dgx-a100-01
 ```
 
 To run the container while connected:
@@ -415,7 +418,8 @@ $ singularity run --nv -B ${PWD}:/host_pwd --pwd /host_pwd /containers/dgx/Conta
 
 While you are on the server, you can use these tools to monitor the GPU usage:
 
-* `nvtop`: htop for GPU metrics 
+* `nvitop -m`
+* `nvtop`
 * `nvidia-smi` 
 
 **Please remember to log out of the DGX A100 server when you finish running your interactive job.**
