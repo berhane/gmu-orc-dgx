@@ -58,7 +58,7 @@ $  salloc -p gpuq -q gpu -n 1 -t 0-01:00:00
 * If you need a GPU, you can request a GPU along with CPU cores
 
 ```bash
-$ salloc -p gpuq -q gpu -n 1 --gres=gpu:a100:1 -t 0-01:00:00   
+$ salloc -p gpuq -q gpu -n 1 --gres=gpu:A100:1 -t 0-01:00:00   
 ```
 
 This will log you into the DGX as soon as the requested resource is available:
@@ -300,7 +300,7 @@ gpuq           up 1-00:00:00      1   dgx-a100-01
 You can request an interactive access the DGX A100 server through SLLURM as follows:
 
 ```bash
-$ salloc -p gpuq -q gpu --gres=gpu:a100:1 -t 0-01:00:00 
+$ salloc -p gpuq -q gpu --gres=gpu:A100:1 -t 0-01:00:00 
 
 salloc: Granted job allocation 2185 
 salloc: Waiting for resource configuration 
@@ -436,7 +436,7 @@ Below is a sample SLURM batch submission file you can use as an example to submi
 #SBATCH --output=jmultigpu_basics.%j 
 #SBATCH --nodes=1 
 #SBATCH --ntasks-per-node=<N_CPU_CORES> 
-#SBATCH --gres=gpu:a100:<N_GPUs> 
+#SBATCH --gres=gpu:A100:<N_GPUs> 
 #SBATCH --mem-per-cpu=<MEM_PER_CORE>  
 #SBATCH --export=ALL 
 #SBATCH -time=0-01:00:00 
