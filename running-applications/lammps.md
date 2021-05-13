@@ -33,7 +33,7 @@ A typical batch submission file \(named `run.slurm` \)  would like this:
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1                # up to 128, but make sute ntasks x cpus-per-task < 128
 #SBATCH --cpus-per-task=1          # up to 128; but make sute ntasks x cpus-per-task < 128
-#SBATCH --gres=gpu:a100:1          # up to 8; only request what you need
+#SBATCH --gres=gpu:A100:1          # up to 8; only request what you need
 #SBATCH --mem-per-cpu=35000M                # memory per CORE; total memory is 1 PB (1,000,000 MB)
 # SBATCH --mail-user=user@inst.edu
 # SBATCH --mail-type=ALL
