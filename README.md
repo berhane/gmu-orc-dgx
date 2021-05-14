@@ -439,7 +439,7 @@ Below is a sample SLURM batch submission file you can use as an example to submi
 #SBATCH --gres=gpu:A100:<N_GPUs> 
 #SBATCH --mem-per-cpu=<MEM_PER_CORE>  
 #SBATCH --export=ALL 
-#SBATCH -time=0-01:00:00 
+#SBATCH --time=0-01:00:00 
 
 set echo 
 umask 0022 
