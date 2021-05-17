@@ -112,30 +112,35 @@ $ tree /containers/dgx/Containers
 
 /containers/dgx/Containers
 ├── autodock
-│   └── autodock_2020.06.sif
+│   └── autodock_2020.06.sif
 ├── caffe
-│   └── caffe_20.03-py3.sif
+│   └── caffe_20.03-py3.sif
 ├── digits
-│   └── digits_21.02-tensorflow-py3.sif
+│   └── digits_21.02-tensorflow-py3.sif
 ├── gamess
-│   └── gamess_17.09-r2-libcchem.sif
+│   └── gamess_17.09-r2-libcchem.sif
 ├── gromacs
-│   └── gromacs-2020_2.sif
+│   └── gromacs-2020_2.sif
 ├── lammps
-│   └── lammps_29Oct2020.sif
+│   ├── lammps_10Feb2021.sif
+│   └── lammps_29Oct2020.sif
 ├── namd
-│   ├── namd_2.13-singlenode.sif
-│   └── namd_3.0-alpha3-singlenode.sif
+│   ├── namd_2.13-multinode.sif
+│   ├── namd_2.13-singlenode.sif
+│   └── namd_3.0-alpha3-singlenode.sif
 ├── ngc-preflightcheck
-│   └── ngc-preflightcheck_20.11.sif
+│   └── ngc-preflightcheck_20.11.sif
 ├── nvidia-hpc-benchmarks
-│   └── hpc-benchmarks_20.10-hpl.sif
+│   └── hpc-benchmarks_20.10-hpl.sif
 ├── pytorch
-│   └── pytorch_21.02-py3.sif
+│   └── pytorch_21.02-py3.sif
 ├── quantum_espresso
-│   └── quantum_espresso_v6.7.sif
+│   └── quantum_espresso_v6.7.sif
 └── tensorflow
-    └── tensorflow_21.02-tf1-py3.sif
+    ├── tensorflow_21.02-tf1-py3.sif
+    ├── tensorflow_21.02-tf2-py3.sif
+    ├── tensorflow_21.04-tf1-py3.sif
+    └── tensorflow_21.04-tf2-py3.sif
 ```
 
 We encourage using these shared containers because they are optimized by NVIDIA to run well on the DGX. Sharing containers also saves storage space. Please let us know if you want us to add particular containers.
@@ -418,9 +423,11 @@ $ singularity run --nv -B ${PWD}:/host_pwd --pwd /host_pwd /containers/dgx/Conta
 
 While you are on the server, you can use these tools to monitor the GPU usage:
 
-* `nvitop -m`
-* `nvtop`
-* `nvidia-smi` 
+* `nvidia-smi`  -  has lots of option to set and monitor GPUs
+
+  `nvitop -m` - great for live monitoring GPU usage, complete with color coding
+
+* `nvtop` - ncurses-based  gpu monitoring similar to '`htop`' 
 
 **Please remember to log out of the DGX A100 server when you finish running your interactive job.**
 
