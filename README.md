@@ -38,7 +38,7 @@ Log into the Hopper cluster with:
 $ ssh <username>@hopper.orc.gmu.edu.
 ```
 
-You can log into the DGX only if you only have an active job on the DGX: 
+You can log into the DGX only if you only have an active job on the DGX:
 
 * you have submitted a SLURM batch job \(using `sbatch`\) and it is actively running on the DGX, or 
 * you have an active SLURM interactive session \(using `salloc`\) on the DGX
@@ -52,13 +52,13 @@ Because the DGX has a different OS \(Ubuntu 20.04 LTS\) and CPU architecture \(A
 * If you don't need a GPU, you can request 1 core :
 
 ```bash
-$  salloc -p gpuq -q gpu -n 1 -t 0-01:00:00 
+$  salloc -p gpuq -q gpu -n 1 -t 0-01:00:00
 ```
 
 * If you need a GPU, you can request a GPU along with CPU cores
 
 ```bash
-$ salloc -p gpuq -q gpu -n 1 --gres=gpu:A100:1 -t 0-01:00:00   
+$ salloc -p gpuq -q gpu -n 1 --gres=gpu:A100-40gb:1 -t 0-01:00:00
 ```
 
 This will log you into the DGX as soon as the requested resource is available:
@@ -112,30 +112,30 @@ $ tree /containers/dgx/Containers
 
 /containers/dgx/Containers
 ├── autodock
-│   └── autodock_2020.06.sif
+│   └── autodock_2020.06.sif
 ├── caffe
-│   └── caffe_20.03-py3.sif
+│   └── caffe_20.03-py3.sif
 ├── digits
-│   └── digits_21.02-tensorflow-py3.sif
+│   └── digits_21.02-tensorflow-py3.sif
 ├── gamess
-│   └── gamess_17.09-r2-libcchem.sif
+│   └── gamess_17.09-r2-libcchem.sif
 ├── gromacs
-│   └── gromacs-2020_2.sif
+│   └── gromacs-2020_2.sif
 ├── lammps
-│   ├── lammps_10Feb2021.sif
-│   └── lammps_29Oct2020.sif
+│   ├── lammps_10Feb2021.sif
+│   └── lammps_29Oct2020.sif
 ├── namd
-│   ├── namd_2.13-multinode.sif
-│   ├── namd_2.13-singlenode.sif
-│   └── namd_3.0-alpha3-singlenode.sif
+│   ├── namd_2.13-multinode.sif
+│   ├── namd_2.13-singlenode.sif
+│   └── namd_3.0-alpha3-singlenode.sif
 ├── ngc-preflightcheck
-│   └── ngc-preflightcheck_20.11.sif
+│   └── ngc-preflightcheck_20.11.sif
 ├── nvidia-hpc-benchmarks
-│   └── hpc-benchmarks_20.10-hpl.sif
+│   └── hpc-benchmarks_20.10-hpl.sif
 ├── pytorch
-│   └── pytorch_21.02-py3.sif
+│   └── pytorch_21.02-py3.sif
 ├── quantum_espresso
-│   └── quantum_espresso_v6.7.sif
+│   └── quantum_espresso_v6.7.sif
 └── tensorflow
     ├── tensorflow_21.02-tf1-py3.sif
     ├── tensorflow_21.02-tf2-py3.sif
@@ -192,7 +192,7 @@ $ ngc registry image info nvcr.io:hpc/gromacs
   2020.2-x86_64 
   2018.2 
   2016.4
-  
+
 $ ngc registry image info nvcr.io/hpc/gromacs:2020.2 
 
 -------------------------------------------------- 
@@ -247,7 +247,7 @@ The DGX is very different from Argo and Hopper in terms of OS, CPU and GPU archi
 | **System** | **Argo** | **Hopper** | **DGX** |
 | :--- | :--- | :--- | :--- |
 | **OS** | CentOS 7.8 | CentOS 8.3 | Ubuntu 20.04 |
-| **CPU** | Intel  | Intel | AMD |
+| **CPU** | Intel | Intel | AMD |
 | **GPUs** | K80, V100 | - | A100 |
 | **NVIDIA  driver version** | 440.x-455.y | - | 450.x |
 
@@ -263,10 +263,9 @@ salloc: Nodes dgx-a100-01 are ready for job
 $
 ```
 
-You should see a `hosts/dgx` module loaded and other  modules that are available to you:
+You should see a `hosts/dgx` module loaded and other modules that are available to you:
 
 ```text
-
 $ module avail
 ...
 ----- GNU-9.3.0 ---------
@@ -303,62 +302,62 @@ gpuq         1     0/1/0/1        8:16:1   1024000     2-00:00:00 dgx-a100-01   
 orc-test     70    27/43/0/70     2:24:1   180000      1-00:00:00 hop[001-070]    (null)
 ```
 
-The GPU list shows 6x A100 GPUs as well as 9x 1g.5gb, 1x 2g.10gb and 1x 3g.20gb resources. The latter three types of resources are a product of a partitioning scheme called Multi-Instance GPU (MIG).  
+The GPU list shows 6x A100-40gb GPUs as well as 9x 1g.5gb, 1x 2g.10gb and 1x 3g.20gb resources. The latter three types of resources are a product of a partitioning scheme called Multi-Instance GPU \(MIG\).
 
 ### GPU partitioning
 
-The DGX A100 has 8 NVIDIA Tesla A100 GPUs which can be further partitioned into smaller slices to optimize access and utilization. For example, each GPU can be sliced into as many as 7 instances when enabled to operate in [MIG (Multi-Instance GPU)](https://docs.nvidia.com/datacenter/tesla/mig-user-guide/index.html) mode. 
+The DGX A100 has 8 NVIDIA Tesla A100 GPUs which can be further partitioned into smaller slices to optimize access and utilization. For example, each GPU can be sliced into as many as 7 instances when enabled to operate in [MIG \(Multi-Instance GPU\)](https://docs.nvidia.com/datacenter/tesla/mig-user-guide/index.html) mode.
 
 ![MIG-mode](https://docs.nvidia.com/datacenter/tesla/mig-user-guide/graphics/gpu-mig-overview.jpg)
 
-GPU Instance Profiles on A100 Profile 
+GPU Instance Profiles on A100 Profile
 
-| Name 	| Fraction of Memory |	Fraction of SMs |	Hardware Units |	L2 Cache Size |	Number of Instances Available |
-| :---  | :---               | :----            | :--------        | :--------        | :------------------- 
-| MIG 1g.5gb  |	1/8 |	1/7 |	0 NVDECs |	1/8 |	7 |
-| MIG 2g.10gb |	2/8 |	2/7 |	1 NVDECs |	2/8 |	3 |
-| MIG 3g.20gb |	4/8 |	3/7 |	2 NVDECs |	4/8 |	2 |
-| MIG 4g.20gb | 4/8 |	4/7 |	2 NVDECs |	4/8 |	1 |
-| MIG 7g.40gb |	Full |	7/7 |	5 NVDECs |	Full |	1 |
+| Name | Fraction of Memory | Fraction of SMs | Hardware Units | L2 Cache Size | Number of Instances Available |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| MIG 1g.5gb | 1/8 | 1/7 | 0 NVDECs | 1/8 | 7 |
+| MIG 2g.10gb | 2/8 | 2/7 | 1 NVDECs | 2/8 | 3 |
+| MIG 3g.20gb | 4/8 | 3/7 | 2 NVDECs | 4/8 | 2 |
+| MIG 4g.20gb | 4/8 | 4/7 | 2 NVDECs | 4/8 | 1 |
+| MIG 7g.40gb | Full | 7/7 | 5 NVDECs | Full | 1 |
 
-Our DGX is currently partitioned such that six of the 8 A100 GPUs (GPU ID 0-5) are not partitioned while the last two (GPU ID 6-7) are partitioned into slices of different sizes.
+Our DGX is currently partitioned such that six of the 8 A100 GPUs \(GPU ID 0-5\) are not partitioned while the last two \(GPU ID 6-7\) are partitioned into slices of different sizes.
 
-| GPU ID | Size  | GRES name 
-| :--- | :--- | :---- |
-| 0  | Full A100 | A100-40g  
-| 1  | Full A100 | A100-40g 
-| 2  | Full A100 | A100-40g
-| 3  | Full A100 | A100-40g
-| 4  | Full A100 | A100-40g
-| 5  | Full A100 | A100-40g
-| 6  | 1/7 A100  | 1g.5gb
-|    | 1/7 A100  | 1g.5gb
-|    | 1/7 A100  | 1g.5gb
-|    | 1/7 A100  | 1g.5gb
-|    | 1/7 A100  | 1g.5gb
-|    | 1/7 A100  | 1g.5gb
-|    | 1/7 A100  | 1g.5gb
-| 7  | 1/7 A100  | 1g.5gb
-|    | 1/7 A100  | 1g.5gb
-|    | 2/7 A100 | 2g.10gb
-|    | 4/7 A100 | 3g.20gb
+| GPU ID | Size | GRES name |
+| :--- | :--- | :--- |
+| 0 | Full A100 | A100-40g |
+| 1 | Full A100 | A100-40g |
+| 2 | Full A100 | A100-40g |
+| 3 | Full A100 | A100-40g |
+| 4 | Full A100 | A100-40g |
+| 5 | Full A100 | A100-40g |
+| 6 | 1/7 A100 | 1g.5gb |
+|  | 1/7 A100 | 1g.5gb |
+|  | 1/7 A100 | 1g.5gb |
+|  | 1/7 A100 | 1g.5gb |
+|  | 1/7 A100 | 1g.5gb |
+|  | 1/7 A100 | 1g.5gb |
+|  | 1/7 A100 | 1g.5gb |
+| 7 | 1/7 A100 | 1g.5gb |
+|  | 1/7 A100 | 1g.5gb |
+|  | 2/7 A100 | 2g.10gb |
+|  | 4/7 A100 | 3g.20gb |
 
 The way the GPUs are partitioned will likely change over time to optimize utilization.
 
-The best way to take advantage of MIG operation is to analyze the demands of your job and determine which GPU size is available and suitable for it. For example, if your simulation uses very small memory, you would be better off using a 1g.5gb slice and leaving the bigger partitions to jobs that need more GPU memory. Another consideration for machine learning jobs is the difference in demands of training and inference tasks. Training tasks are more compute and memory intensive, this they are a better for for a full GPU or large partition while inference tasks would run sufficiently on smaller slices. 
+The best way to take advantage of MIG operation is to analyze the demands of your job and determine which GPU size is available and suitable for it. For example, if your simulation uses very small memory, you would be better off using a 1g.5gb slice and leaving the bigger partitions to jobs that need more GPU memory. Another consideration for machine learning jobs is the difference in demands of training and inference tasks. Training tasks are more compute and memory intensive, this they are a better for for a full GPU or large partition while inference tasks would run sufficiently on smaller slices.
 
 ### Interactive Mode
 
 You can request an interactive access the DGX A100 server through SLLURM as follows:
 
 ```bash
-$ salloc -p gpuq -q gpu --gres=gpu:A100:1 -t 0-01:00:00 
+$ salloc -p gpuq -q gpu --gres=gpu:A100-40gb:1 -t 0-01:00:00 
 
 salloc: Granted job allocation 2185 
 salloc: Waiting for resource configuration 
 salloc: Nodes dgx-a100-01 are ready for job
 
-$ 
+$
 ```
 
 Once your reservation is available, you will be logged into the DGX automatically:
@@ -509,11 +508,11 @@ $ singularity run --nv -B ${PWD}:/host_pwd --pwd /host_pwd /containers/dgx/Conta
 
 While you are on the server, you can use these tools to monitor the GPU usage:
 
-* `nvidia-smi`  -  has lots of option to set and monitor GPUs
+* `nvidia-smi` - has lots of option to set and monitor GPUs
 
   `nvitop -m` - great for live monitoring GPU usage, complete with color coding
 
-* `nvtop` - ncurses-based  gpu monitoring similar to '`htop`' 
+* `nvtop` - ncurses-based gpu monitoring similar to '`htop`'
 
 **Please remember to log out of the DGX A100 server when you finish running your interactive job.**
 
@@ -529,7 +528,7 @@ Below is a sample SLURM batch submission file you can use as an example to submi
 #SBATCH --output=jmultigpu_basics.%j 
 #SBATCH --nodes=1 
 #SBATCH --ntasks-per-node=<N_CPU_CORES> 
-#SBATCH --gres=gpu:A100:<N_GPUs> 
+#SBATCH --gres=gpu:1g.5gb:<N_GPUs> 
 #SBATCH --mem-per-cpu=<MEM_PER_CORE>  
 #SBATCH --export=ALL 
 #SBATCH --time=0-01:00:00 
