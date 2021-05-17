@@ -284,21 +284,68 @@ $ module avail
 
 Once you have a native or containerized application, you can run it through SLURM either interactively or using batch submission scripts. Both approaches are discussed below. To run jobs on the DGX, you would need
 
+You can run a native or containerized application through SLURM either interactively or using batch submission scripts. Both approaches are discussed below. To run jobs on the DGX, you would need
+
 * to have a SLURM account on Hopper AND
 * be eligible to use the 'gpu' Quality-of-Service \(QoS\) 
 
 The DGX is part of the ‘gpuq’ partition.
 
 ```bash
-$ sinfo 
+$ sinfo -o "%12P %5D %14F %8z %10m %.11l %15N %G" 
 
-PARTITION   AVAIL  TIMELIMIT  NODES  NODELIST 
-debug          up    1:00:00      2   hop[043-045] 
-interactive    up   12:00:00      2   hop[043-045] 
-contrib        up 6-00:00:00      42  hop[001-042]
-normal         up 3-00:00:00      25  hop[046-070] 
-gpuq           up 1-00:00:00      1   dgx-a100-01
+PARTITION    NODES NODES(A/I/O/T) S:C:T    MEMORY       TIMELIMIT NODELIST        GRES
+debug        3     0/3/0/3        2:24:1   180000         1:00:00 hop[043-045]    (null)
+interactive  3     0/3/0/3        2:24:1   180000        12:00:00 hop[043-045]    (null)
+contrib      42    6/36/0/42      2:24:1   180000      6-00:00:00 hop[001-042]    (null)
+normal*      25    21/4/0/25      2:24:1   180000      3-00:00:00 hop[046-070]    (null)
+gpuq         1     0/1/0/1        8:16:1   1024000     2-00:00:00 dgx-a100-01     gpu:A100-40g:6,gpu:1g.5gb:9,gpu:2g.10gb:1,gpu:3g.20gb:1
+orc-test     70    27/43/0/70     2:24:1   180000      1-00:00:00 hop[001-070]    (null)
 ```
+
+The GPU list shows 6x A100 GPUs as well as 9x 1g.5gb, 1x 2g.10gb and 1x 3g.20gb resources. The latter three types of resources are a product of a partitioning scheme called Multi-Instance GPU (MIG).  
+
+### GPU partitioning
+
+The DGX A100 has 8 NVIDIA Tesla A100 GPUs which can be further partitioned into smaller slices to optimize access and utilization. For example, each GPU can be sliced into as many as 7 instances when enabled to operate in [MIG (Multi-Instance GPU)](https://docs.nvidia.com/datacenter/tesla/mig-user-guide/index.html) mode. 
+
+![MIG-mode](https://docs.nvidia.com/datacenter/tesla/mig-user-guide/graphics/gpu-mig-overview.jpg)
+
+GPU Instance Profiles on A100 Profile 
+
+| Name 	| Fraction of Memory |	Fraction of SMs |	Hardware Units |	L2 Cache Size |	Number of Instances Available |
+| :---  | :---               | :----            | :--------        | :--------        | :------------------- 
+| MIG 1g.5gb  |	1/8 |	1/7 |	0 NVDECs |	1/8 |	7 |
+| MIG 2g.10gb |	2/8 |	2/7 |	1 NVDECs |	2/8 |	3 |
+| MIG 3g.20gb |	4/8 |	3/7 |	2 NVDECs |	4/8 |	2 |
+| MIG 4g.20gb | 4/8 |	4/7 |	2 NVDECs |	4/8 |	1 |
+| MIG 7g.40gb |	Full |	7/7 |	5 NVDECs |	Full |	1 |
+
+Our DGX is currently partitioned such that six of the 8 A100 GPUs (GPU ID 0-5) are not partitioned while the last two (GPU ID 6-7) are partitioned into slices of different sizes.
+
+| GPU ID | Size  | GRES name 
+| :--- | :--- | :---- |
+| 0  | Full A100 | A100-40g  
+| 1  | Full A100 | A100-40g 
+| 2  | Full A100 | A100-40g
+| 3  | Full A100 | A100-40g
+| 4  | Full A100 | A100-40g
+| 5  | Full A100 | A100-40g
+| 6  | 1/7 A100  | 1g.5gb
+|    | 1/7 A100  | 1g.5gb
+|    | 1/7 A100  | 1g.5gb
+|    | 1/7 A100  | 1g.5gb
+|    | 1/7 A100  | 1g.5gb
+|    | 1/7 A100  | 1g.5gb
+|    | 1/7 A100  | 1g.5gb
+| 7  | 1/7 A100  | 1g.5gb
+|    | 1/7 A100  | 1g.5gb
+|    | 2/7 A100 | 2g.10gb
+|    | 4/7 A100 | 3g.20gb
+
+The way the GPUs are partitioned will likely change over time to optimize utilization.
+
+The best way to take advantage of MIG operation is to analyze the demands of your job and determine which GPU size is available and suitable for it. For example, if your simulation uses very small memory, you would be better off using a 1g.5gb slice and leaving the bigger partitions to jobs that need more GPU memory. Another consideration for machine learning jobs is the difference in demands of training and inference tasks. Training tasks are more compute and memory intensive, this they are a better for for a full GPU or large partition while inference tasks would run sufficiently on smaller slices. 
 
 ### Interactive Mode
 
@@ -347,36 +394,36 @@ Thu Mar 15 10:58:08 2021
 |                               |                      |               MIG M. |
 |===============================+======================+======================|
 |   0  A100-SXM4-40GB      On   | 00000000:07:00.0 Off |                    0 |
-| N/A   28C    P0    52W / 400W |    400MiB / 40537MiB |      1%      Default |
+| N/A   29C    P0    52W / 400W |      0MiB / 40537MiB |      0%      Default |
 |                               |                      |             Disabled |
 +-------------------------------+----------------------+----------------------+
 |   1  A100-SXM4-40GB      On   | 00000000:0F:00.0 Off |                    0 |
-| N/A   29C    P0    54W / 400W |   5701MiB / 40537MiB |     12%      Default |
+| N/A   30C    P0    54W / 400W |      0MiB / 40537MiB |      0%      Default |
 |                               |                      |             Disabled |
 +-------------------------------+----------------------+----------------------+
 |   2  A100-SXM4-40GB      On   | 00000000:47:00.0 Off |                    0 |
-| N/A   28C    P0    53W / 400W |  36121MiB / 40537MiB |     90%      Default |
+| N/A   29C    P0    53W / 400W |      0MiB / 40537MiB |      0%      Default |
 |                               |                      |             Disabled |
 +-------------------------------+----------------------+----------------------+
 |   3  A100-SXM4-40GB      On   | 00000000:4E:00.0 Off |                    0 |
-| N/A   28C    P0    54W / 400W |      0MiB / 40537MiB |      0%      Default |
+| N/A   29C    P0    55W / 400W |      0MiB / 40537MiB |      0%      Default |
 |                               |                      |             Disabled |
 +-------------------------------+----------------------+----------------------+
 |   4  A100-SXM4-40GB      On   | 00000000:87:00.0 Off |                    0 |
-| N/A   32C    P0    52W / 400W |      0MiB / 40537MiB |      0%      Default |
+| N/A   33C    P0    53W / 400W |      0MiB / 40537MiB |      0%      Default |
 |                               |                      |             Disabled |
 +-------------------------------+----------------------+----------------------+
 |   5  A100-SXM4-40GB      On   | 00000000:90:00.0 Off |                    0 |
-| N/A   30C    P0    51W / 400W |      0MiB / 40537MiB |      0%      Default |
+| N/A   31C    P0    51W / 400W |      0MiB / 40537MiB |      0%      Default |
 |                               |                      |             Disabled |
 +-------------------------------+----------------------+----------------------+
-|   6  A100-SXM4-40GB      On   | 00000000:B7:00.0 Off |                    0 |
-| N/A   32C    P0    55W / 400W |      0MiB / 40537MiB |      0%      Default |
-|                               |                      |             Disabled |
+|   6  A100-SXM4-40GB      On   | 00000000:B7:00.0 Off |                   On |
+| N/A   31C    P0    46W / 400W |     25MiB / 40537MiB |     N/A      Default |
+|                               |                      |              Enabled |
 +-------------------------------+----------------------+----------------------+
 |   7  A100-SXM4-40GB      On   | 00000000:BD:00.0 Off |                   On |
-| N/A   34C    P0    69W / 400W |      0MiB / 40537MiB |     N/A      Default |
-|                               |                      |            Disabled* |
+| N/A   31C    P0    42W / 400W |     25MiB / 40537MiB |     N/A      Default |
+|                               |                      |              Enabled |
 +-------------------------------+----------------------+----------------------+
 
 +-----------------------------------------------------------------------------+
@@ -386,7 +433,46 @@ Thu Mar 15 10:58:08 2021
 |      ID  ID  Dev |           BAR1-Usage | SM     Unc| CE  ENC  DEC  OFA  JPG|
 |                  |                      |        ECC|                       |
 |==================+======================+===========+=======================|
-|  No MIG devices found                                                       |
+|  6    7   0   0  |      3MiB /  4864MiB | 14      0 |  1   0    0    0    0 |
+|                  |      0MiB /  8191MiB |           |                       |
++------------------+----------------------+-----------+-----------------------+
+|  6    8   0   1  |      3MiB /  4864MiB | 14      0 |  1   0    0    0    0 |
+|                  |      0MiB /  8191MiB |           |                       |
++------------------+----------------------+-----------+-----------------------+
+|  6    9   0   2  |      3MiB /  4864MiB | 14      0 |  1   0    0    0    0 |
+|                  |      0MiB /  8191MiB |           |                       |
++------------------+----------------------+-----------+-----------------------+
+|  6   10   0   3  |      3MiB /  4864MiB | 14      0 |  1   0    0    0    0 |
+|                  |      0MiB /  8191MiB |           |                       |
++------------------+----------------------+-----------+-----------------------+
+|  6   11   0   4  |      3MiB /  4864MiB | 14      0 |  1   0    0    0    0 |
+|                  |      0MiB /  8191MiB |           |                       |
++------------------+----------------------+-----------+-----------------------+
+|  6   12   0   5  |      3MiB /  4864MiB | 14      0 |  1   0    0    0    0 |
+|                  |      0MiB /  8191MiB |           |                       |
++------------------+----------------------+-----------+-----------------------+
+|  6   13   0   6  |      3MiB /  4864MiB | 14      0 |  1   0    0    0    0 |
+|                  |      0MiB /  8191MiB |           |                       |
++------------------+----------------------+-----------+-----------------------+
+|  7    1   0   0  |     11MiB / 20096MiB | 42      0 |  3   0    2    0    0 |
+|                  |      0MiB / 32767MiB |           |                       |
++------------------+----------------------+-----------+-----------------------+
+|  7    5   0   1  |      7MiB /  9984MiB | 28      0 |  2   0    1    0    0 |
+|                  |      0MiB / 16383MiB |           |                       |
++------------------+----------------------+-----------+-----------------------+
+|  7   13   0   2  |      3MiB /  4864MiB | 14      0 |  1   0    0    0    0 |
+|                  |      0MiB /  8191MiB |           |                       |
++------------------+----------------------+-----------+-----------------------+
+|  7   14   0   3  |      3MiB /  4864MiB | 14      0 |  1   0    0    0    0 |
+|                  |      0MiB /  8191MiB |           |                       |
++------------------+----------------------+-----------+-----------------------+
+
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
+|  No running processes found                                                 |
 +-----------------------------------------------------------------------------+
 
 +-----------------------------------------------------------------------------+
