@@ -21,7 +21,7 @@ Please update **NGPUS**, NTASKS**, NMOPT**
 #SBATCH --nodes=1
 #SBATCH --ntasks=__NTASKS__                # up to 128, but make sute ntasks x cpus-per-task < 128
 #SBATCH --cpus-per-task=__NOMPT__          # up to 128; but make sute ntasks x cpus-per-task < 128
-#SBATCH --gres=gpu:A100-40gb:__NGPUS__          # up to 8; only request what you need
+#SBATCH --gres=gpu:A100.40gb:__NGPUS__          # up to 8; only request what you need
 #SBATCH --mem-per-cpu=3500M                # memory per CORE; total memory is 1 PB (1,000,000 MB)
 #SBATCH --export=ALL
 #SBATCH --time=0-01:00:00                  # set to 1hr; please choose carefully

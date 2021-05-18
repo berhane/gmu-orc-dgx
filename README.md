@@ -58,7 +58,7 @@ $  salloc -p gpuq -q gpu -n 1 -t 0-01:00:00
 * If you need a GPU, you can request a GPU along with CPU cores
 
 ```bash
-$ salloc -p gpuq -q gpu -n 1 --gres=gpu:A100-40gb:1 -t 0-01:00:00
+$ salloc -p gpuq -q gpu -n 1 --gres=gpu:A100.40gb:1 -t 0-01:00:00
 ```
 
 This will log you into the DGX as soon as the requested resource is available:
@@ -302,7 +302,7 @@ gpuq         1     0/1/0/1        8:16:1   1024000     2-00:00:00 dgx-a100-01   
 orc-test     70    27/43/0/70     2:24:1   180000      1-00:00:00 hop[001-070]    (null)
 ```
 
-The GPU list shows 6x A100-40gb GPUs as well as 9x 1g.5gb, 1x 2g.10gb and 1x 3g.20gb resources. The latter three types of resources are a product of a partitioning scheme called Multi-Instance GPU \(MIG\).
+The GPU list shows 6x A100.40gb GPUs as well as 9x 1g.5gb, 1x 2g.10gb and 1x 3g.20gb resources. The latter three types of resources are a product of a partitioning scheme called Multi-Instance GPU \(MIG\).
 
 ### GPU partitioning
 
@@ -351,7 +351,7 @@ The best way to take advantage of MIG operation is to analyze the demands of you
 You can request an interactive access the DGX A100 server through SLLURM as follows:
 
 ```bash
-$ salloc -p gpuq -q gpu --gres=gpu:A100-40gb:1 -t 0-01:00:00 
+$ salloc -p gpuq -q gpu --gres=gpu:A100.40gb:1 -t 0-01:00:00 
 
 salloc: Granted job allocation 2185 
 salloc: Waiting for resource configuration 
