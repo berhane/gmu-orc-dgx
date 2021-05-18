@@ -20,7 +20,7 @@ You can find it at `/containers/dgx/Examples/Tensorflow/21.02-tf1-py3/1-single-G
 #SBATCH --output=jsingle-gpu.%j
 #SBATCH --nodes=1
 #SBATCH --ntasks=1                # up to 128; note that multithreading is enabled
-#SBATCH --gres=gpu:a100:1          # up to 8; only request what you need
+#SBATCH --gres=gpu:A100.40gb:1          # up to 8; only request what you need
 #SBATCH --mem-per-cpu=3500M                # memory per CORE; total memory is 1 TB (1,000,000 MB)
 #SBATCH --export=ALL
 #SBATCH --time=0-01:00:00                  # set to 1hr; please choose carefully
@@ -51,7 +51,7 @@ You can find this example at `/containers/dgx/Examples/Tensorflow/21.02-tf1-py3/
 #SBATCH --output=jmultigpu-2.%j
 #SBATCH --nodes=1
 #SBATCH --ntasks=8                # up to 128; note that multithreading is enabled
-#SBATCH --gres=gpu:a100:2          # up to 8; only request what you need
+#SBATCH --gres=gpu:A100.40gb:2          # up to 8; only request what you need
 #SBATCH --mem-per-cpu=3500M                # memory per CORE; total memory is 1 TB (1,000,000 MB)
 #SBATCH --export=ALL
 #SBATCH --time=0-01:00:00                  # set to 1hr; please choose carefully

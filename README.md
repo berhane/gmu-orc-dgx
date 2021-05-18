@@ -298,7 +298,7 @@ debug        3     0/3/0/3        2:24:1   180000         1:00:00 hop[043-045]  
 interactive  3     0/3/0/3        2:24:1   180000        12:00:00 hop[043-045]    (null)
 contrib      42    6/36/0/42      2:24:1   180000      6-00:00:00 hop[001-042]    (null)
 normal*      25    21/4/0/25      2:24:1   180000      3-00:00:00 hop[046-070]    (null)
-gpuq         1     0/1/0/1        8:16:1   1024000     2-00:00:00 dgx-a100-01     gpu:A100-40g:6,gpu:1g.5gb:9,gpu:2g.10gb:1,gpu:3g.20gb:1
+gpuq         1     0/1/0/1        8:16:1   1024000     2-00:00:00 dgx-a100-01     gpu:A100-40gb:6,gpu:1g.5gb:9,gpu:2g.10gb:1,gpu:3g.20gb:1
 orc-test     70    27/43/0/70     2:24:1   180000      1-00:00:00 hop[001-070]    (null)
 ```
 
@@ -324,12 +324,12 @@ Our DGX is currently partitioned such that six of the 8 A100 GPUs \(GPU ID 0-5\)
 
 | GPU ID | Size | GRES name |
 | :--- | :--- | :--- |
-| 0 | Full A100 | A100-40g |
-| 1 | Full A100 | A100-40g |
-| 2 | Full A100 | A100-40g |
-| 3 | Full A100 | A100-40g |
-| 4 | Full A100 | A100-40g |
-| 5 | Full A100 | A100-40g |
+| 0 | Full A100 | A100.40g |
+| 1 | Full A100 | A100.40g |
+| 2 | Full A100 | A100.40g |
+| 3 | Full A100 | A100.40g |
+| 4 | Full A100 | A100.40g |
+| 5 | Full A100 | A100.40g |
 | 6 | 1/7 A100 | 1g.5gb |
 |  | 1/7 A100 | 1g.5gb |
 |  | 1/7 A100 | 1g.5gb |
